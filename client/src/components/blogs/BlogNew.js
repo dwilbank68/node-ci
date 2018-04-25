@@ -5,7 +5,11 @@ import BlogForm from './BlogForm';
 import BlogFormReview from './BlogFormReview';
 
 class BlogNew extends Component {
-  state = { showFormReview: false };
+
+    constructor(props, context){
+        super(props, context);
+        this.state = { showFormReview: false };
+    }
 
   renderContent() {
     if (this.state.showFormReview) {

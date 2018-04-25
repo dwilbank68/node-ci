@@ -10,13 +10,11 @@ class BlogForm extends Component {
   renderFields() {
     return _.map(formFields, ({ label, name }) => {
       return (
-        <Field
-          key={name}
-          component={BlogField}
-          type="text"
-          label={label}
-          name={name}
-        />
+        <Field  key={name}
+                component={BlogField}
+                type="text"
+                label={label}
+                name={name} />
       );
     });
   }

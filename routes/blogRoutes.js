@@ -34,16 +34,16 @@ module.exports = app => {
         const { title, content } = req.body;
 
         const blog = new Blog({
-          title,
-          content,
-          _user: req.user.id
+            title,
+            content,
+            _user: req.user.id
         });
 
         try {
-          await blog.save();
-          res.send(blog);
+            await blog.save();
+            res.send(blog);
         } catch (err) {
-          res.send(400, err);
+            res.send(400, err);
         }
       }
   );
