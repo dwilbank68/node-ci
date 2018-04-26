@@ -33,7 +33,6 @@ describe('When logged in', async () => {
         test('the form shows an error message', async () => {
             const titleError = await page.getContentsOf('.title .red-text');
             const contentError = await page.getContentsOf('.content .red-text');
-
             expect(titleError).toEqual('You must provide a value');
             expect(contentError).toEqual('You must provide a value');
         })
@@ -77,41 +76,22 @@ describe('When logged in', async () => {
 
 describe('when user not logged in', function() {
 
-    test('user cannot create blog posts', async () => {
+    const actions = [
+        {method:'get',  path:'/api/blogs'},
+        {method:'post', path:'/api/blogs', data: {title:'T', content:'C'}}
+    ]
 
-        const postFromConsole = () => {
-            const postObj = {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: '{"title":"unauth title","content":"unauth content"}'
-            }
-            return fetch('/api/blogs', postObj).then(res => res.json());
+    test('blog actions are prohibited', async () => {
+        const results = await page.execRequests(actions);                    // 6
+        for (let result of results) {
+            expect(result).toEqual({error:'You must log in!'});
         }
+    });
+    
 
-        const result = await page.evaluate(postFromConsole)
-        expect(result.error).toEqual('You must log in!');
-
-    })
-
-    test('user cannot get list of blogs', async () => {
-
-        const postFromConsole = () => {
-            const postObj = {
-                method: 'GET',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            return fetch('/api/blogs').then(res => res.json());
-        }
-
-        const result = await page.evaluate(postFromConsole)
-        expect(result.error).toEqual('You must log in!');
-
-    })
-
+    
 });
+
+// 1 -  returns a proxy which allows you to call methods on puppeteer's
+//      browser object, page object, and your own custom page
+// 6 -  await result of Promise.all (array of results)
