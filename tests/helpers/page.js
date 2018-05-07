@@ -4,7 +4,11 @@ const userFactory = require("../../tests/factories/userFactory");
 
 class CustomPage {                                                              // 1
     static async build(){
-        const browser = await pup.launch({headless:false})
+        // const browser = await pup.launch({headless:false})                   // 1.5
+        const browser = await pup.launch({
+            headless:true,
+            args: ['--no-sandbox']
+        })
 
         const page = await browser.newPage();
         const customPage = new CustomPage(page);
@@ -53,7 +57,7 @@ class CustomPage {                                                              
         await this.page.setCookie({ name: 'session', value: session });
         await this.page.setCookie({ name: 'session.sig', value: sig});
 
-        await this.page.goto('localhost:3000/blogs');                          // 5
+        await this.page.goto('http://localhost:3000/blogs');                          // 5
 
         await this.page.waitFor('a[href="/auth/logout"]');
     }
@@ -76,6 +80,7 @@ class CustomPage {                                                              
 module.exports = CustomPage;
 
 // 1 -  CustomPage will be called as 'page' in the tests
+// 1.5 - headless:false is only for development - it shows you the browser...
 // 2 -  and the proxy will route any methods called on 'page'
 //      to either puppeteer's Browser, puppeteer's page, or the
 //      methods defined below on this CustomPage class

@@ -54,3 +54,4 @@ export default reduxForm({
   form: 'blogForm',
   destroyOnUnmount: false
 })(BlogForm);
+
